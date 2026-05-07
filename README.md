@@ -121,4 +121,11 @@ npm run dev
 
 ---
 
+🛠 開發規範 (Dev Notes)
+為了保持開發效率與穩定，請遵循：
+
+1. Push 規則：小型修正可直接 Push，大型功能建議開 feature/xxx 分支。
+2. 同步習慣：Push 前請先 git pull --rebase，避免產生不必要的 Merge Commit。
+3. 註釋要求：Commit message 盡量簡潔明瞭（例如：feat: 修正登入邏輯）。
+
 `v0.2` · 2026-05-06 · 開發中
