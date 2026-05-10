@@ -68,4 +68,7 @@ def generate_comparison(papers: list) -> str:
         "prompt": prompt,
         "stream": False
     }, timeout=180)
-    return response.json()["response"]
+    try:
+        return response.json()["response"]
+    except (KeyError, ValueError) as e:
+        raise RuntimeError(f"Ollama 回傳格式錯誤: {e}") from e
