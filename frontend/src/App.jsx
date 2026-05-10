@@ -28,7 +28,8 @@ function formatText(text) {
      .replace(/__(.+?)__/g, "<strong>$1</strong>")
      .replace(/_(.+?)_/g, "<em>$1</em>");
 
-  const lines = esc(text).split(/\r?\n/);
+  const lines = esc(text).split(/?
+/);
   let html = "", inList = false, pOpen = false;
   let tableBuf = [];
 
@@ -188,7 +189,7 @@ export default function App() {
               updatePaper(paper.id, { status: "error", error: "連線錯誤，請重試" });
               reject();
             };
-          }, 500);
+          }, 1000);
         })
         .catch(() => {
           updatePaper(paper.id, { status: "error", error: "上傳失敗，請確認 backend 是否正常運行" });
