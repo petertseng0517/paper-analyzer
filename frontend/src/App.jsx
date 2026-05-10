@@ -28,8 +28,7 @@ function formatText(text) {
      .replace(/__(.+?)__/g, "<strong>$1</strong>")
      .replace(/_(.+?)_/g, "<em>$1</em>");
 
-  const lines = esc(text).split(/?
-/);
+  const lines = esc(text).split(/\r?\n/);
   let html = "", inList = false, pOpen = false;
   let tableBuf = [];
 
