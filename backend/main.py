@@ -2,13 +2,15 @@ import os
 import shutil
 import uuid
 import asyncio
+from typing import List
 from fastapi import FastAPI, UploadFile, File, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
+from pydantic import BaseModel
 from pdf_parser import extract_text_from_pdf
 from chunker import chunk_by_section
-from analyzer import extract_key_points, generate_summary_and_review
+from analyzer import extract_key_points, generate_summary_and_review, generate_comparison
 
 app = FastAPI()
 
@@ -145,6 +147,19 @@ async def process_analysis(task_id: str, temp_path: str):
         # 清理臨時檔案
         if os.path.exists(temp_path):
             os.remove(temp_path)
+
+class PaperInput(BaseModel):
+    name: str
+    summary: str
+
+class CompareRequest(BaseModel):
+    papers: List[PaperInput]
+
+@app.post("/compare")
+async def compare_papers(request: CompareRequest):
+    papers = [{"name": p.name, "summary": p.summary} for p in request.papers]
+    result = await asyncio.to_thread(generate_comparison, papers)
+    return {"result": result}
 
 @app.get("/health")
 def health():

@@ -1,96 +1,53 @@
 :root {
-  --text: #1d1d1f;
-  --text-secondary: #86868b;
-  --bg: #ffffff;
-  --bg-secondary: #f5f5f7;
-  --border: #d2d2d7;
-  --accent: #0071e3;
-  --accent-hover: #005bb5;
-  --success: #34c759;
-  --error: #ff3b30;
-  --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.15);
-  --radius: 12px;
-  --radius-large: 16px;
-
-  --sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
+  --sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
   --mono: 'SF Mono', ui-monospace, Consolas, monospace;
-
   font: 16px/1.5 var(--sans);
-  color: var(--text);
-  background: var(--bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #f5f5f7;
-    --text-secondary: #86868b;
-    --bg: #1d1d1f;
-    --bg-secondary: #2d2d2f;
-    --border: #424245;
-    --accent: #2997ff;
-    --accent-hover: #0071e3;
-    --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.4);
-  }
-}
-
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  background: var(--bg);
-  color: var(--text);
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(96,165,250,0.12), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(45,212,191,0.10), transparent 30%),
+    #0f1117;
+  color: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  font-family: Inter, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
 }
 
 #root {
-  min-height: 100vh;
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  background: linear-gradient(135deg, var(--bg) 0%, var(--bg-secondary) 100%);
+  justify-content: center;
 }
 
-h1,
-h2 {
-  font-family: var(--sans);
-  font-weight: 600;
-  color: var(--text);
+h1, h2 {
+  font-weight: 700;
   margin: 0;
-}
-
-h1 {
-  font-size: 36px;
-  letter-spacing: -0.5px;
-}
-
-h2 {
-  font-size: 24px;
-  letter-spacing: -0.3px;
 }
 
 p {
   margin: 0;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 code {
   font-family: var(--mono);
-  background: var(--bg-secondary);
+  font-size: 0.9em;
   padding: 2px 6px;
   border-radius: 4px;
-  font-size: 0.9em;
-}
-
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+  background: rgba(255,255,255,0.08);
 }
