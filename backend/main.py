@@ -6,7 +6,6 @@ from typing import List
 from fastapi import FastAPI, UploadFile, File, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from pdf_parser import extract_text_from_pdf
 from chunker import chunk_by_section
@@ -129,7 +128,9 @@ async def process_analysis(task_id: str, temp_path: str):
         analysis_tasks[task_id]["progress"] = 95
         analysis_tasks[task_id]["message"] = "正在生成摘要..."
 
-        combined = "\n\n".join(all_key_points)
+        combined = "
+
+".join(all_key_points)
         result = await asyncio.to_thread(generate_summary_and_review, combined)
 
         # 完成
