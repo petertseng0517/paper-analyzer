@@ -75,22 +75,15 @@
 
 ### 3.1 整體架構
 
-```
-使用者瀏覽器（前端）
-      │
-      │  HTTP POST /analyze（上傳 PDF）
-      │  WebSocket /ws/analyze/{task_id}（接收進度）
-      │  HTTP POST /compare（多篇比較）
-      ▼
-後端伺服器（FastAPI）
-      │
-      ├─ pdf_parser.py  →  PyMuPDF 提取 PDF 文字
-      ├─ chunker.py     →  依章節標題切分文字段落
-      └─ analyzer.py    →  呼叫 Ollama API 進行 LLM 分析
-                              │
-                              ▼
-                        Ollama（本地端）
-                        Qwen2.5:7b 模型
+```mermaid
+flowchart TD
+    A["使用者瀏覽器\nReact + Vite"] -->|"HTTP POST /analyze"| B["FastAPI 後端\nUvicorn"]
+    A -->|"WebSocket /ws/analyze/{task_id}"| B
+    A -->|"HTTP POST /compare"| B
+    B --> C["pdf_parser.py\nPyMuPDF 提取文字"]
+    B --> D["chunker.py\n依章節標題切分段落"]
+    B --> E["analyzer.py\nLLM 呼叫"]
+    E -->|"REST API — localhost:11434"| F["Ollama 本地端\nQwen2.5:7b"]
 ```
 
 ### 3.2 技術選型
@@ -124,6 +117,15 @@
 | 20% | 文字分段 | 依學術章節標題切割為多個段落 |
 | 20–90% | 逐段分析 | 每個段落透過 Qwen2.5 提取重點（繁體中文條列式） |
 | 95–100% | 生成總結 | 彙整所有段落重點，生成摘要、優點、缺點 |
+
+```mermaid
+flowchart TD
+    A[上傳 PDF] --> B["提取全文文字\nPyMuPDF\n進度 10%"]
+    B --> C["依章節標題切分段落\nchunker.py\n進度 20%"]
+    C --> D["逐段提取重點\nextract_key_points\n進度 20–90%"]
+    D --> E["彙整重點，生成總結\ngenerate_summary_and_review\n進度 95%"]
+    E --> F["分析完成\n100%"]
+```
 
 ### 4.3 即時進度顯示
 
@@ -187,6 +189,18 @@ Prompt 設計是本專案的核心，直接決定 AI 輸出的結構與品質，
 
 ## 缺點 Cons
 - （條列3-5點）
+```
+
+```mermaid
+flowchart LR
+    A["論文全文"] --> B["切分為 N 個段落\nchunker.py"]
+    B --> C["段落 1"]
+    B --> D["段落 2 … N"]
+    C --> E["Prompt ①\n提取各段重點\n繁體中文條列式"]
+    D --> E
+    E --> F["重點彙整\ncombined key points"]
+    F --> G["Prompt ②\n生成摘要＋優缺點\n固定三區塊格式"]
+    G --> H["Markdown 輸出"]
 ```
 
 **設計考量**：採用兩階段設計（先提取重點、再生成總結），而非直接把全文送入，是因為 Qwen2.5:7b 的有效 context 視窗有限。分段提取後再彙整，相當於讓模型在更精煉的資訊上進行最終判斷，輸出品質明顯優於直接輸入全文。強制指定三個輸出區塊（摘要、優點、缺點），是為了讓前端能穩定解析並渲染 Markdown。
